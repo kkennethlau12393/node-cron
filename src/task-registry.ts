@@ -23,6 +23,9 @@ export class TaskRegistry {
     if(this.has(task.id)){
       tasks.delete(task.id);
       task.destroy();
+    } else if (task && typeof task.destroy === "function") {
+      // task was never registered (or already removed): still release its resources
+      task.destroy();
     }
   }
 
