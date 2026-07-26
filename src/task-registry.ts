@@ -27,6 +27,18 @@ export class TaskRegistry {
     }
   }
 
+  /** Number of currently registered tasks. */
+  count(): number {
+    let total = 0;
+    tasks.forEach(() => { total = total + 1; });
+    return total;
+  }
+
+  /** True when no tasks are registered. */
+  isEmpty(): boolean {
+    return this.count() === 0;
+  }
+
   all(): typeof tasks {
     return tasks;
   }
