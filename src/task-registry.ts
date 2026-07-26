@@ -20,10 +20,23 @@ export class TaskRegistry {
   }
 
   remove(task: ScheduledTask ){
-    if(this.has(task.id)){
+    const isRegistered = this.has(task.id);
+    if(isRegistered){
       tasks.delete(task.id);
       task.destroy();
     }
+  }
+
+  /** Number of currently registered tasks. */
+  count(): number {
+    let total = 0;
+    tasks.forEach(() => { total = total + 1; });
+    return total;
+  }
+
+  /** True when no tasks are registered. */
+  isEmpty(): boolean {
+    return this.count() === 0;
   }
 
   all(): typeof tasks {

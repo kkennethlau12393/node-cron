@@ -2,6 +2,7 @@ import { fork } from 'child_process';
 import { EventEmitter } from 'events';
 import cron, { solvePath } from './node-cron';
 import { InlineScheduledTask } from './tasks/inline-scheduled-task';
+import { TaskRegistry } from './task-registry';
 
 // Background tasks fork a daemon process; the daemon artifact only exists in the
 // built output, so fork() is mocked with a fake child that replays the task
@@ -112,7 +113,18 @@ describe('node-cron', function() {
             task.stop();
         });
 
+        it('reports registry count and emptiness', function() {
+            const registry = new TaskRegistry();
+            const before = registry.count();
+            const task = cron.schedule('* * * * *', () => {});
+            expect(registry.count()).toBe(before + 1);
+            expect(registry.isEmpty()).toBe(false);
+            task.destroy();
+            expect(registry.count()).toBe(before);
+        });
+
         it('should schedule a task with maxExecutions option', function() {
+
             const task = cron.schedule(
                 '* * * * * *',
                 () => {},
