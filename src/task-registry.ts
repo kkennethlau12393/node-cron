@@ -20,11 +20,9 @@ export class TaskRegistry {
   }
 
   remove(task: ScheduledTask ){
-    if(this.has(task.id)){
+    const isRegistered = this.has(task.id);
+    if(isRegistered){
       tasks.delete(task.id);
-      task.destroy();
-    } else if (task && typeof task.destroy === "function") {
-      // task was never registered (or already removed): still release its resources
       task.destroy();
     }
   }
